@@ -1,3 +1,4 @@
+// Create a map that links different book statuses to their colors and abilities
 const STATUS_MAP = {
     shelf: {
         color: 'green',
@@ -25,30 +26,53 @@ const STATUS_MAP = {
     }
 };
 
-// Helper function to update book elements based on their ID
-function updateBookStatus(bookId, status) {
-    const bookElement = document.getElementById(bookId);
+// Find and group elements on the webpage by their class names
+const statusElements = document.getElementsByClassName("status");
+const reserveButtons = document.getElementsByClassName("reserve");
+const checkoutButtons = document.getElementsByClassName("checkout");
+const checkinButtons = document.getElementsByClassName("checkin");
 
-    // Update status indicator text color
-    const statusIndicator = bookElement.querySelector('.status');
-    statusIndicator.style.color = STATUS_MAP[status].color;
+// Go through each book's status on the webpage and make changes
+for (let i = 0; i < statusElements.length; i++) {
+    // Get the book's status and prepare it for use
+    const statusText = statusElements[i].textContent.trim().toLowerCase();
+    
+    // Find out what the status means from the STATUS_MAP
+    const statusInfo = STATUS_MAP[statusText];
 
-    // Enable or disable buttons based on STATUS_MAP properties
-    const reserveButton = bookElement.querySelector('.reserve');
-    const checkoutButton = bookElement.querySelector('.checkout');
-    const checkinButton = bookElement.querySelector('.checkin');
+    // Change the color of the book's status text
+    statusElements[i].style.color = statusInfo.color;
 
-    reserveButton.disabled = !STATUS_MAP[status].canReserve;
-    checkoutButton.disabled = !STATUS_MAP[status].canCheckout;
-    checkinButton.disabled = !STATUS_MAP[status].canCheckIn;
+    // Set if buttons can be clicked based on the status map
+    reserveButtons[i].disabled = !statusInfo.canReserve;
+    checkoutButtons[i].disabled = !statusInfo.canCheckout;
+    checkinButtons[i].disabled = !statusInfo.canCheckIn;
 
-    // Set button colors to grayscale
-    reserveButton.style.color = 'black';
-    checkoutButton.style.color = 'black';
-    checkinButton.style.color = 'black';
+    // Make buttons look faded if they can't be clicked
+    if (!statusInfo.canReserve) {
+        reserveButtons[i].style.filter = "grayscale(100%)";
+    }
+    if (!statusInfo.canCheckout) {
+        checkoutButtons[i].style.filter = "grayscale(100%)";
+    }
+    if (!statusInfo.canCheckIn) {
+        checkinButtons[i].style.filter = "grayscale(100%)";
+        checkinButtons[i].style.color = "green"; // Change the text color of the "Check In" button to green
+    }
 }
 
-// Call updateBookStatus for each book element
-updateBookStatus('book1', 'overdue');
-updateBookStatus('book2', 'reserved');
-updateBookStatus('book3', 'shelf');
+// Update individual books' status display
+// For book1
+const book1Status = document.querySelector('#book1 .status').textContent.trim().toLowerCase();
+const book1StatusInfo = STATUS_MAP[book1Status];
+document.querySelector('#book1 .status').style.color = book1StatusInfo.color;
+
+// For book2
+const book2Status = document.querySelector('#book2 .status').textContent.trim().toLowerCase();
+const book2StatusInfo = STATUS_MAP[book2Status];
+document.querySelector('#book2 .status').style.color = book2StatusInfo.color;
+
+// For book3
+const book3Status = document.querySelector('#book3 .status').textContent.trim().toLowerCase();
+const book3StatusInfo = STATUS_MAP[book3Status];
+document.querySelector('#book3 .status').style.color = book3StatusInfo.color;
